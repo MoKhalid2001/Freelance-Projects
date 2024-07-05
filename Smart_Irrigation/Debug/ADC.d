@@ -1,0 +1,5 @@
+ADC.o ADC.o: ../ADC.c ../LIB/BIT_MATH.h ../LIB/STD_TYPES.h
+
+../LIB/BIT_MATH.h:
+
+../LIB/STD_TYPES.h:
