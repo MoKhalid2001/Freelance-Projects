@@ -1,5 +1,5 @@
 
-# Smart System using ATmega32 Microcontroller
+# Automated Irrigation System using ATmega32 Microcontroller
 
 
 ## Overview
