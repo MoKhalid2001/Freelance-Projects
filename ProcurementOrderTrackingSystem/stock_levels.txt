@@ -1,0 +1,10 @@
+Electric Kettle,12
+Blender,3
+Microwave Oven,8
+Vacuum Cleaner,2
+Air Conditioner,15
+Toaster,5
+Refrigerator,6
+Ceiling Fan,1
+Heater,4
+Water Purifier,10

@@ -1,0 +1,14 @@
+Electric Kettle,5,2024-11-01
+Blender,3,2024-11-01
+Microwave Oven,2,2024-11-01
+Electric Kettle,4,2024-11-02
+Vacuum Cleaner,6,2024-11-02
+Air Conditioner,1,2024-11-03
+Toaster,7,2024-11-03
+Blender,5,2024-11-04
+Refrigerator,2,2024-11-04
+Ceiling Fan,4,2024-11-05
+Heater,3,2024-11-05
+Water Purifier,2,2024-11-06
+Electric Kettle,6,2024-11-06
+Blender,8,2024-11-06

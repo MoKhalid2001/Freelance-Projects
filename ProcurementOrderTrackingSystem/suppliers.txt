@@ -1,0 +1,3 @@
+SUP001,Supplier A
+SUP002,Supplier B
+SUP003,Supplier C

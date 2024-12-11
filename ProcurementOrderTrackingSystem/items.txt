@@ -1,0 +1,10 @@
+ITM001,Electric Kettle,SUP001
+ITM002,Blender,SUP002
+ITM003,Microwave Oven,SUP001
+ITM004,Vacuum Cleaner,SUP003
+ITM005,Air Conditioner,SUP004
+ITM006,Toaster,SUP002
+ITM007,Refrigerator,SUP003
+ITM008,Ceiling Fan,SUP001
+ITM009,Heater,SUP004
+ITM010,Water Purifier,SUP002

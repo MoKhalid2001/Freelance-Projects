@@ -1,0 +1,10 @@
+R001,2024-11-26,5,ITM001,Electric Kettle,Jane Smith,Sales
+R002,2024-11-26,3,ITM002,Blender,Michael Brown,Purchase
+R003,2024-11-27,2,ITM003,Microwave Oven,Jane Smith,Sales
+R004,2024-11-27,4,ITM004,Vacuum Cleaner,Michael Brown,Purchase
+R005,2024-11-28,1,ITM005,Air Conditioner,Jane Smith,Sales
+R006,2024-11-28,10,ITM006,Toaster,Michael Brown,Purchase
+R007,2024-11-29,6,ITM007,Refrigerator,Jane Smith,Sales
+R008,2024-11-29,8,ITM008,Ceiling Fan,Michael Brown,Purchase
+R009,2024-11-30,7,ITM009,Heater,Jane Smith,Sales
+R010,2024-11-30,9,ITM010,Water Purifier,Michael Brown,Purchase
