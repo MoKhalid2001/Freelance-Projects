@@ -10,15 +10,17 @@ public class BookCarForm extends javax.swing.JFrame {
     private Connection connection;
     private int carId;
     private int customerId;
+    private String customerName;
     private String make;
     private String model;
     private Double price;
     /**
      * Creates new form BookCarForm
      */
-    public BookCarForm(Connection connection, int customerId, int carId, String make, String model, Double price) {
+    public BookCarForm(Connection connection, int customerId, String customerName, int carId, String make, String model, Double price) {
         this.connection = connection;
         this.customerId = customerId;
+        this.customerName = customerName;
         this.carId = carId;
         this.make = make;
         this.model = model;
@@ -52,6 +54,7 @@ public class BookCarForm extends javax.swing.JFrame {
         calculateButton = new javax.swing.JButton();
         daysField = new javax.swing.JTextField();
         confirmBookingButton = new javax.swing.JButton();
+        backButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -100,6 +103,14 @@ public class BookCarForm extends javax.swing.JFrame {
             }
         });
 
+        backButton.setBackground(new java.awt.Color(122, 178, 211));
+        backButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/back-button.png"))); // NOI18N
+        backButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                backButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -111,23 +122,28 @@ public class BookCarForm extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(24, 24, 24)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 315, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(daysField, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(135, 135, 135)
-                        .addComponent(confirmBookingButton))
+                        .addComponent(confirmBookingButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 117, Short.MAX_VALUE)
+                        .addComponent(backButton))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(14, 14, 14)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(carLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 265, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(calculateButton)
-                                .addGap(18, 18, 18)
-                                .addComponent(totalPriceLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(priceLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 346, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(153, Short.MAX_VALUE))
+                                .addGap(24, 24, 24)
+                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 315, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(daysField, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(14, 14, 14)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(carLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 265, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(calculateButton)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(totalPriceLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(priceLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 346, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -148,6 +164,10 @@ public class BookCarForm extends javax.swing.JFrame {
                 .addGap(28, 28, 28)
                 .addComponent(confirmBookingButton)
                 .addGap(0, 18, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(backButton)
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -217,8 +237,19 @@ public class BookCarForm extends javax.swing.JFrame {
             updateStmt.setInt(2, customerId);  // Use customerId to identify the customer
             updateStmt.executeUpdate();
         }
+        
+        // Step 4: Insert a new record into the 'bookings' table
+        String insertBookingQuery = "INSERT INTO bookings (car_id, customer_id, days, total_price, booking_date) VALUES (?, ?, ?, ?, ?)";
+        try (PreparedStatement insertStmt = connection.prepareStatement(insertBookingQuery)) {
+            insertStmt.setInt(1, carId);  // Use carId
+            insertStmt.setInt(2, customerId);  // Use customerId
+            insertStmt.setInt(3, days);  // Number of days
+            insertStmt.setDouble(4, totalPrice);  // Total price for the booking
+            insertStmt.setDate(5, new java.sql.Date(System.currentTimeMillis()));  // Current date as booking date
+            insertStmt.executeUpdate();  // Execute the insert
+        }
 
-        // Step 4: Show success message and close the booking form
+        // Step 5: Show success message and close the booking form
         JOptionPane.showMessageDialog(this, "Car booked successfully! Total price: $" + String.format("%.2f", totalPrice));
         this.dispose();  // Close the window after booking
 
@@ -229,6 +260,12 @@ public class BookCarForm extends javax.swing.JFrame {
         JOptionPane.showMessageDialog(this, "An error occurred while booking the car.", "Database Error", JOptionPane.ERROR_MESSAGE);
     }
     }//GEN-LAST:event_confirmBookingButtonActionPerformed
+
+    private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backButtonActionPerformed
+        // TODO add your handling code here:
+        this.dispose();
+        new CustomerDashboard(connection, customerName, customerId).setVisible(true);
+    }//GEN-LAST:event_backButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -266,6 +303,7 @@ public class BookCarForm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton backButton;
     private javax.swing.JButton calculateButton;
     private javax.swing.JLabel carLabel;
     private javax.swing.JButton confirmBookingButton;
