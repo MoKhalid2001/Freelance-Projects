@@ -11,17 +11,19 @@ import java.sql.SQLException;
 public class ViewBookingsForm extends javax.swing.JFrame {
     private Connection connection;
     private int customerId;  // Store the customer ID
+    private String customerName;
     private DefaultTableModel model;
     
     /**
      * Creates new form ViewBookingsForm
      */
-    public ViewBookingsForm(Connection connection, int customerId) {
+    public ViewBookingsForm(Connection connection, int customerId, String customerName) {
         this.connection = connection;
         this.customerId = customerId;
+        this.customerName = customerName;
         initComponents();
         // Set up table model
-        model = new DefaultTableModel(new Object[]{"Make", "Model", "Price (Per Day)", "Total Price"}, 0);
+        model = new DefaultTableModel(new Object[]{"ID", "Make", "Model", "Price (Per Day)", "Availability"}, 0);
         bookingsTable.setModel(model);
         loadBookings();  // Load the current bookings for the customer        
     }
@@ -44,17 +46,18 @@ public class ViewBookingsForm extends javax.swing.JFrame {
     }
 
     // Step 2: Load the current bookings of the customer from the cars table
-    String bookingsQuery = "SELECT make, model, price FROM cars WHERE booked_by = ?";
+    String bookingsQuery = "SELECT id, make, model, price FROM cars WHERE booked_by = ?";
     try (PreparedStatement stmt = connection.prepareStatement(bookingsQuery)) {
         stmt.setInt(1, customerId);
         ResultSet rs = stmt.executeQuery();
         while (rs.next()) {
+            int id = rs.getInt("id");
             String make = rs.getString("make");
             String modelStr = rs.getString("model");
             double price = rs.getDouble("price");
 
             // Display individual booking price and cumulative totalPrice for all bookings
-            model.addRow(new Object[]{make, modelStr, price, totalPrice});
+            model.addRow(new Object[]{id, make, modelStr, price, totalPrice});
         }
     } catch (SQLException e) {
         e.printStackTrace();
@@ -71,11 +74,16 @@ public class ViewBookingsForm extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         bookingsTable = new javax.swing.JTable();
+        jLabel2 = new javax.swing.JLabel();
         returnCar = new javax.swing.JButton();
+        backButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jPanel1.setBackground(new java.awt.Color(122, 178, 211));
 
         bookingsTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -90,35 +98,72 @@ public class ViewBookingsForm extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(bookingsTable);
 
-        returnCar.setFont(new java.awt.Font("Segoe UI Light", 1, 14)); // NOI18N
-        returnCar.setText("Return Car");
+        jLabel2.setFont(new java.awt.Font("Segoe UI Light", 1, 36)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(74, 98, 138));
+        jLabel2.setText("View Current Bookings");
+
+        returnCar.setBackground(new java.awt.Color(122, 178, 211));
+        returnCar.setFont(new java.awt.Font("Segoe UI Light", 1, 18)); // NOI18N
+        returnCar.setForeground(new java.awt.Color(74, 98, 138));
+        returnCar.setLabel("Return Car");
         returnCar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 returnCarActionPerformed(evt);
             }
         });
 
+        backButton.setBackground(new java.awt.Color(122, 178, 211));
+        backButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/back-button.png"))); // NOI18N
+        backButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                backButtonActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 384, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(42, 42, 42))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 484, Short.MAX_VALUE)
+                .addContainerGap())
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(157, 157, 157)
+                .addComponent(returnCar)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(backButton)
+                .addContainerGap())
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 329, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(returnCar, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(backButton, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addContainerGap())
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-            .addGroup(layout.createSequentialGroup()
-                .addGap(131, 131, 131)
-                .addComponent(returnCar)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(returnCar)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         pack();
@@ -127,41 +172,48 @@ public class ViewBookingsForm extends javax.swing.JFrame {
     private void returnCarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_returnCarActionPerformed
         // TODO add your handling code here:
         int selectedRow = bookingsTable.getSelectedRow();  // Get the selected row
-    if (selectedRow != -1) {
-        int carId = (int) model.getValueAt(selectedRow, 0);  // Car ID from the table
-        double bookingPrice = (Double) model.getValueAt(selectedRow, 3);  // Price per day * days (or simply total price for the booking)
+        if (selectedRow != -1) {
+            int carId = (int) model.getValueAt(selectedRow, 0);  // Car ID from the table
+            double bookingPrice = (Double) model.getValueAt(selectedRow, 3);  // Price per day * days (or simply total price for the booking)
 
-        // Step 1: Update the car's availability by incrementing the available count and setting booked_by to NULL
-        String updateCarQuery = "UPDATE cars SET available = available + 1, booked_by = NULL WHERE id = ?";
-        try (PreparedStatement updateStmt = connection.prepareStatement(updateCarQuery)) {
-            updateStmt.setInt(1, carId);
-            updateStmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Error updating car availability.", "Database Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
+            // Step 1: Update the car's availability by incrementing the available count and setting booked_by to NULL
+            String updateCarQuery = "UPDATE cars SET available = available + 1, booked_by = NULL WHERE id = ?";
+            try (PreparedStatement updateStmt = connection.prepareStatement(updateCarQuery)) {
+                updateStmt.setInt(1, carId);
+                updateStmt.executeUpdate();
+            } catch (SQLException e) {
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(this, "Error updating car availability.", "Database Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
 
-        // Step 2: Decrement the customer's total price in the customers table
-        String updateCustomerQuery = "UPDATE customers SET total_price = total_price - ? WHERE id = ?";
-        try (PreparedStatement updateStmt = connection.prepareStatement(updateCustomerQuery)) {
-            updateStmt.setDouble(1, bookingPrice);  // Decrease the total price by the booking's total price
-            updateStmt.setInt(2, customerId);
-            updateStmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Error updating customer total price.", "Database Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
+            // Step 2: Decrement the customer's total price in the customers table
+            String updateCustomerQuery = "UPDATE customers SET total_price = total_price - ? WHERE id = ?";
+            try (PreparedStatement updateStmt = connection.prepareStatement(updateCustomerQuery)) {
+                updateStmt.setDouble(1, bookingPrice);  // Decrease the total price by the booking's total price
+                updateStmt.setInt(2, customerId);
+                updateStmt.executeUpdate();
+            } catch (SQLException e) {
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(this, "Error updating customer total price.", "Database Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
 
-        // Step 3: Remove the returned car from the table
-        model.removeRow(selectedRow);
+            // Step 3: Remove the returned car from the table
+            model.removeRow(selectedRow);
 
-        JOptionPane.showMessageDialog(this, "Car returned successfully!");
-    } else {
-        JOptionPane.showMessageDialog(this, "Please select a car to return.");
-    }      
+            JOptionPane.showMessageDialog(this, "Car returned successfully!");
+        } else {
+            JOptionPane.showMessageDialog(this, "Please select a car to return.");
+        }      
+       
     }//GEN-LAST:event_returnCarActionPerformed
+
+    private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backButtonActionPerformed
+        // TODO add your handling code here:
+        this.dispose();
+        new CustomerDashboard(connection, customerName, customerId).setVisible(true);
+    }//GEN-LAST:event_backButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -199,7 +251,10 @@ public class ViewBookingsForm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton backButton;
     private javax.swing.JTable bookingsTable;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton returnCar;
     // End of variables declaration//GEN-END:variables

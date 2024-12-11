@@ -12,13 +12,15 @@ public class BookCar extends javax.swing.JFrame {
     private Connection connection;
     private DefaultTableModel model;
     private int customerId;
+    private String customerName;
 
     /**
      * Creates new form BookCar
      */
-    public BookCar(Connection connection, int customerId) {
+    public BookCar(Connection connection, String customerName, int customerId) {
         this.connection = connection;
         this.customerId = customerId;
+        this.customerName = customerName;
         initComponents();
         model = new DefaultTableModel(new Object[]{"ID", "Make", "Model", "Price (Per Day)", "Availability"}, 0);
         carsTable.setModel(model);
@@ -64,6 +66,7 @@ public class BookCar extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         carsTable = new javax.swing.JTable();
         bookCarButton = new javax.swing.JButton();
+        backButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -90,10 +93,17 @@ public class BookCar extends javax.swing.JFrame {
         bookCarButton.setFont(new java.awt.Font("Segoe UI Light", 1, 24)); // NOI18N
         bookCarButton.setForeground(new java.awt.Color(74, 98, 138));
         bookCarButton.setText("Book That Car");
-        bookCarButton.setActionCommand("Book That Car");
         bookCarButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bookCarButtonActionPerformed(evt);
+            }
+        });
+
+        backButton.setBackground(new java.awt.Color(122, 178, 211));
+        backButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/back-button.png"))); // NOI18N
+        backButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                backButtonActionPerformed(evt);
             }
         });
 
@@ -109,12 +119,13 @@ public class BookCar extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(167, 167, 167)
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 266, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(186, 186, 186)
+                        .addComponent(bookCarButton, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(backButton)))
                 .addContainerGap())
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(186, 186, 186)
-                .addComponent(bookCarButton, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -123,7 +134,9 @@ public class BookCar extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 412, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(bookCarButton, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(bookCarButton, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(backButton))
                 .addContainerGap())
         );
 
@@ -154,7 +167,7 @@ public class BookCar extends javax.swing.JFrame {
         // Check if the car is available
         if (available > 0) {
             // Car is available, open the booking form
-            BookCarForm bookCarForm = new BookCarForm(connection, customerId, carId, make, model, price);
+            BookCarForm bookCarForm = new BookCarForm(connection, customerId, customerName, carId, make, model, price);
             bookCarForm.setVisible(true);
             
             // Optionally close or hide the current window after opening the booking form
@@ -167,6 +180,12 @@ public class BookCar extends javax.swing.JFrame {
         JOptionPane.showMessageDialog(this, "Please select a car to book.");
     }
     }//GEN-LAST:event_bookCarButtonActionPerformed
+
+    private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backButtonActionPerformed
+        // TODO add your handling code here:
+        this.dispose();
+        new CustomerDashboard(connection, customerName, customerId).setVisible(true);
+    }//GEN-LAST:event_backButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -204,6 +223,7 @@ public class BookCar extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton backButton;
     private javax.swing.JButton bookCarButton;
     private javax.swing.JTable carsTable;
     private javax.swing.JLabel jLabel1;

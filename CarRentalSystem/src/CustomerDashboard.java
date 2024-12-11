@@ -1,5 +1,4 @@
 
-
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -34,6 +33,7 @@ public class CustomerDashboard extends javax.swing.JFrame {
         searchCarsButton = new javax.swing.JButton();
         viewBookingsButton = new javax.swing.JButton();
         welcomeLabel = new javax.swing.JLabel();
+        backButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -67,6 +67,14 @@ public class CustomerDashboard extends javax.swing.JFrame {
         welcomeLabel.setForeground(new java.awt.Color(74, 98, 138));
         welcomeLabel.setText("Customer Name");
 
+        backButton.setBackground(new java.awt.Color(122, 178, 211));
+        backButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/back-button.png"))); // NOI18N
+        backButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                backButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -86,6 +94,10 @@ public class CustomerDashboard extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 90, Short.MAX_VALUE)
                         .addComponent(viewBookingsButton)
                         .addGap(21, 21, 21))))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(backButton)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -98,7 +110,9 @@ public class CustomerDashboard extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(searchCarsButton)
                     .addComponent(viewBookingsButton))
-                .addContainerGap(56, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
+                .addComponent(backButton)
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -118,16 +132,22 @@ public class CustomerDashboard extends javax.swing.JFrame {
     private void searchCarsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchCarsButtonActionPerformed
         // TODO add your handling code here:
         // Open the Search Cars screen
-        BookCar bookCar = new BookCar(connection, customerId);  // Implement SearchCars
+        BookCar bookCar = new BookCar(connection, customerName, customerId);  // Implement SearchCars
         bookCar.setVisible(true);
     }//GEN-LAST:event_searchCarsButtonActionPerformed
 
     private void viewBookingsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewBookingsButtonActionPerformed
         // TODO add your handling code here:
         // Open the View Bookings screen
-        ViewBookingsForm viewBookings = new ViewBookingsForm(connection, customerId);  // Implement ViewBookings
+        ViewBookingsForm viewBookings = new ViewBookingsForm(connection, customerId, customerName);  // Implement ViewBookings
         viewBookings.setVisible(true);
     }//GEN-LAST:event_viewBookingsButtonActionPerformed
+
+    private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backButtonActionPerformed
+        // TODO add your handling code here:
+        this.dispose();
+        new login(connection).setVisible(true);
+    }//GEN-LAST:event_backButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -165,6 +185,7 @@ public class CustomerDashboard extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton backButton;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JButton searchCarsButton;
